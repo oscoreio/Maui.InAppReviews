@@ -20,6 +20,7 @@ internal sealed class InAppReviewImplementation : IInAppReview
 				    .ToArray<UIScene>()?
 				    .FirstOrDefault(x => x.ActivationState == UISceneActivationState.ForegroundActive) is UIWindowScene windowScene)
 			{
+				// Waiting https://github.com/xamarin/xamarin-macios/issues/21410
 				SKStoreReviewController.RequestReview(windowScene);
 					
 				return Task.FromResult(ReviewStatus.Succeeded);

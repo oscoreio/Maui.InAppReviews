@@ -17,7 +17,6 @@ internal sealed class InAppReviewImplementation : IInAppReview
         {
             var context = StoreContext.GetDefault();
 
-#if NET6_0_OR_GREATER
             if (InAppReview.Options.Window is null)
             {
                 throw new InvalidOperationException("WindowObject is null. Please set the WindowObject property before calling RequestReview.");
@@ -26,7 +25,6 @@ internal sealed class InAppReviewImplementation : IInAppReview
             var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(InAppReview.Options.Window);
                 
             WinRT.Interop.InitializeWithWindow.Initialize(context, hWnd);
-#endif
 
             var result = await context.RequestRateAndReviewAppAsync();
             

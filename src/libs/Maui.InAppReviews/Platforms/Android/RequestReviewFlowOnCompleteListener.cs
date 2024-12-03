@@ -22,9 +22,14 @@ internal sealed class RequestReviewFlowOnCompleteListener : Java.Lang.Object, IO
 
 		try
 		{
-			
-			var reviewInfo = (ReviewInfo)task.GetResult(Java.Lang.Class.FromType(typeof(ReviewInfo)));
-			TaskCompletionSource.TrySetResult(reviewInfo);
+			if (task.GetResult(Java.Lang.Class.FromType(typeof(ReviewInfo))) is ReviewInfo reviewInfo)
+			{
+				TaskCompletionSource.TrySetResult(reviewInfo);
+			}
+			else
+			{
+				TaskCompletionSource.TrySetCanceled();
+			}
 		}
 		catch (Exception ex)
 		{
