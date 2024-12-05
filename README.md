@@ -7,13 +7,22 @@
 NuGet package that implementing native In-App Reviews for MAUI with debugging capabilities.
 ![InAppReviews](https://developer.android.com/static/images/google/play/in-app-review/iar-flow.jpg)
 
-In-app reviews supported on Android 5.0 (API level 21) & iOS 10.3+ & Windows devices.  
-It can return ReviewStatus.NotSupported, in this case you can use [AppStoreInfo](https://github.com/oscoreio/Maui.AppStoreInfo) to open review page in the store.
+You also can use [AppStoreInfo](https://github.com/oscoreio/Maui.AppStoreInfo) to open review page in the store.
+
+### Supported Platforms
+| Platform | Minimum Version Supported             |
+|----------|---------------------------------------|
+| iOS      | 12.2+                                 |
+| macOS    | 15+                                   |
+| Android  | 5.0 (API 21)                          |
+| Windows  | 11 and 10 version 1809+ (build 17763) |
+> [!TIP]
+> Also works successfully on iOS 18+/macOS 18+ - there was an API change here
 
 # Usage
 - Add NuGet package to your project:
 ```xml
-<PackageReference Include="Oscore.Maui.InAppReviews" Version="1.0.0" />
+<PackageReference Include="Oscore.Maui.InAppReviews" Version="1.2.0" />
 ```
 - Add the following to your `MauiProgram.cs` `CreateMauiApp` method:
 ```diff
@@ -37,22 +46,6 @@ ReviewStatus status = await InAppReview.Current.RequestAsync();
 - https://github.com/jamesmontemagno/StoreReviewPlugin
 - [Requesting Reviews with iOS 10.3’s SKStoreReviewController](https://devblogs.microsoft.com/xamarin/requesting-reviews-ios-10-3s-skstorereviewcontroller/?WT.mc_id=friends-0000-jamont)  
 - [In-app reviews for your Android apps](https://devblogs.microsoft.com/xamarin/android-in-app-reviews/?WT.mc_id=friends-0000-jamont)  
-
-### Android code shrinker (Proguard & r8)
-
-If you use the plugin with `Link SDK assemblies only`/`Link all`, you have to do the following:
-
-1. Create a `proguard.txt` file in your android project and add the following:
-
-```
-    -keep class com.google.android.play.core.common.PlayCoreDialogWrapperActivity
-    -keep class com.google.android.play.core.review.** { *; }
-    -keep class com.google.android.play.core.tasks.** { *; }
-```
-
-2. Include it to your project
-3. Properties > Build Action > ProguardConfiguration
-4. Go to you Android project options and set your `Code Shrinker` to `ProGuard` or `r8`
 
 ### Testing & Debugging issues
 

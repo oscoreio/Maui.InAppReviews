@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using UIKit;
 using StoreKit;
 
@@ -13,6 +14,20 @@ internal sealed class InAppReviewImplementation : IInAppReview
 	/// </summary>
 	public Task<ReviewStatus> RequestAsync(CancellationToken cancellationToken = default)
 	{
+		if (OperatingSystem.IsMacCatalystVersionAtLeast(18) ||
+		    OperatingSystem.IsIOSVersionAtLeast(18))
+		{
+			if (UIApplication.SharedApplication.ConnectedScenes
+				    .ToArray<UIScene>()?
+				    .FirstOrDefault(x => x.ActivationState == UISceneActivationState.ForegroundActive) is UIWindowScene windowScene)
+			{
+				// https://developer.apple.com/documentation/storekit/requesting-app-store-reviews
+				// https://github.com/xamarin/xamarin-macios/issues/21410
+				AppStore.RequestReview(windowScene);
+					
+				return Task.FromResult(ReviewStatus.Succeeded);
+			}
+		}
 		if (OperatingSystem.IsMacCatalystVersionAtLeast(14) ||
 		    OperatingSystem.IsIOSVersionAtLeast(14))
 		{
@@ -21,7 +36,6 @@ internal sealed class InAppReviewImplementation : IInAppReview
 				    .FirstOrDefault(x => x.ActivationState == UISceneActivationState.ForegroundActive) is UIWindowScene windowScene)
 			{
 				// https://developer.apple.com/documentation/storekit/requesting-app-store-reviews
-				// Waiting https://github.com/xamarin/xamarin-macios/issues/21410
 				SKStoreReviewController.RequestReview(windowScene);
 					
 				return Task.FromResult(ReviewStatus.Succeeded);

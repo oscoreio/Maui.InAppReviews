@@ -26,7 +26,7 @@ internal sealed class InAppReviewImplementation : IInAppReview
                 
             WinRT.Interop.InitializeWithWindow.Initialize(context, hWnd);
 
-            var result = await context.RequestRateAndReviewAppAsync();
+            var result = await context.RequestRateAndReviewAppAsync().AsTask(cancellationToken).ConfigureAwait(true);
             
             return result.Status switch
             {
