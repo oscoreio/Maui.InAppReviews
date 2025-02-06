@@ -36,7 +36,10 @@ internal sealed class InAppReviewImplementation : IInAppReview
 				    .FirstOrDefault(x => x.ActivationState == UISceneActivationState.ForegroundActive) is UIWindowScene windowScene)
 			{
 				// https://developer.apple.com/documentation/storekit/requesting-app-store-reviews
+// Ignore warning because above checks the version of the OS
+#pragma warning disable CA1422
 				SKStoreReviewController.RequestReview(windowScene);
+#pragma warning restore CA1422
 					
 				return Task.FromResult(ReviewStatus.Succeeded);
 			}
